@@ -1,12 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:login/pages/download_page/download_page.dart';
-import 'package:login/pages/lead_page/lead_button_page.dart';
-import 'package:login/pages/lead_page/lead_page.dart';
-
+import 'package:login/pages/lead_page/lead_navigation_page.dart';
 import 'package:provider/provider.dart';
-import 'package:login/pages/pages.dart';
-
 import 'package:login/services/sevices.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,7 +15,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailvalitator = TextEditingController();
+
   final TextEditingController _password = TextEditingController();
+
   final formkey = GlobalKey<FormState>();
   late Future _futureAlbum;
 
@@ -36,23 +33,21 @@ class _LoginPageState extends State<LoginPage> {
 
       widget.onsubmit(_name);
 
-      _emailvalitator.clear();
-      _password.clear();
+      //_emailvalitator.clear();
 
       setState(() {
-        _futureAlbum = createAlbum(
-            Provider.of<Id>(context, listen: false).id, _name, _pass);
+        _futureAlbum = createAlbum(Provider.of<Id>(context, listen: false).id,
+            _emailvalitator.text.trim(), _password.text.trim());
       });
       var result = await _futureAlbum;
-
-      print(result[0]);
-      print(result[1]);
 
       Provider.of<Id>(context, listen: false).transferId1(result[0]);
       Provider.of<Id>(context, listen: false).transferId2(result[1]);
       if (result[0] != null) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) => LeadButton()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => LeadNavigationPage()));
 
         ScaffoldMessenger.of(context)
           ..removeCurrentSnackBar()
@@ -159,6 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.visiblePassword,
                                   controller: _password,
+                                  //initialValue: 'test@123',
                                   obscureText: hidepassword,
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
@@ -202,7 +198,10 @@ class _LoginPageState extends State<LoginPage> {
                                           Color.fromARGB(255, 255, 255, 255),
                                     ),
                                     onPressed:
-                                        _name.isNotEmpty ? _submit : null,
+                                        _emailvalitator.text.isNotEmpty &&
+                                                _password.text.isNotEmpty
+                                            ? _submit
+                                            : null,
                                     child: const Text(
                                       'Log-In',
                                       style: TextStyle(

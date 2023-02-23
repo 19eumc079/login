@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(
-    debug:
-        true, // optional: set to false to disable printing logs to console (default: true)
+    debug: true,
   );
   runApp(ChangeNotifierProvider(
     create: (_) => Id(),

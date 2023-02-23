@@ -13,15 +13,15 @@ class FirstPage extends StatefulWidget {
   @override
   State<FirstPage> createState() => _FirstPage();
 
-  void onSubmit(String name) {}
+  // void onSubmit(String name) {}
 }
 
 class _FirstPage extends State<FirstPage> {
   final _formKey = GlobalKey<FormState>();
-  final _Textfield = TextEditingController();
+  final _Textfield = TextEditingController(text: 'jio');
 
   // declare a variable to keep track of the input text
-  String _name = '';
+  // String _name = '';
 
   void _submit() async {
     // validate all the
@@ -29,10 +29,10 @@ class _FirstPage extends State<FirstPage> {
 
     if (_formKey.currentState!.validate()) {
       // on success
-      widget.onSubmit(_name);
-      var c = _name;
+      // widget.onSubmit(_Textfield.text);
+      // var c = _name;
 
-      var result = await fetchAlbum(c);
+      var result = await fetchAlbum(_Textfield.text);
 
       if (result != null) {
         Navigator.push(context,
@@ -103,7 +103,9 @@ class _FirstPage extends State<FirstPage> {
                                 return null;
                               },
                               // update the state variable when the text changes
-                              onChanged: (text) => setState(() => _name = text),
+                              onChanged: (text) {
+                                setState(() {});
+                              },
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: "Enter your company name",
@@ -115,7 +117,8 @@ class _FirstPage extends State<FirstPage> {
                             width: MediaQuery.of(context).size.width / 2.8,
 
                             child: ElevatedButton(
-                              onPressed: _name.isNotEmpty ? _submit : null,
+                              onPressed:
+                                  _Textfield.text.isNotEmpty ? _submit : null,
                               style: ElevatedButton.styleFrom(
                                 primary: Color.fromARGB(255, 16, 51, 80),
                               ),
